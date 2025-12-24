@@ -155,18 +155,6 @@ A comprehensive, AI-powered marketplace platform connecting vendors and shopkeep
 - **XAMPP** - Local development environment
 - **Composer** - PHP dependency management
 
----
-
-## 🖼️ Screenshots
-
-> **Note:** Add screenshots of your application here. Suggested images:
-> - Home page
-> - Shopkeeper dashboard
-> - Vendor dashboard
-> - Product listing
-> - Shopping cart
-> - Order management
-> - AI Assistant interface
 
 ---
 
@@ -809,8 +797,8 @@ Thanks to all contributors and users who provided feedback during development.
 
 For questions, issues, or support:
 
-- **GitHub Issues:** [Create an issue](https://github.com/yourusername/FSD-II-CODE/issues)
-- **Email:** support@marketplace-ai.com (if available)
+- **GitHub Issues:** [Create an issue]
+- **Email:** support@marketplace-ai.com 
 
 ---
 
