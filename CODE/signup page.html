@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AI Raw Material Marketplace</title>
+    <link href="../styles/tailwind.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .role-btn {
+            transition: all 0.3s ease;
+        }
+        .role-btn.active {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .input-error {
+            border-color: #ef4444;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-600">Marketplace AI</h1>
+            <p class="text-gray-600 mt-2">Create your account</p>
+        </div>
+        
+        <!-- Error Message Display -->
+        <div id="error-message" class="hidden mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <span id="error-text"></span>
+        </div>
+        
+        <form id="registerForm" class="space-y-6" action="signup.php" method="POST">
+            <!-- Role Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">I am a</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" data-role="shopkeeper" class="role-btn flex flex-col items-center justify-center p-3 border-2 border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
+                        <i data-feather="shopping-bag" class="w-5 h-5 mb-2 text-blue-500"></i>
+                        <span>Shopkeeper</span>
+                    </button>
+                    <button type="button" data-role="vendor" class="role-btn flex flex-col items-center justify-center p-3 border-2 border-gray-200 rounded-lg hover:border-green-300 transition-colors">
+                        <i data-feather="truck" class="w-5 h-5 mb-2 text-green-500"></i>
+                        <span>Vendor</span>
+                    </button>
+                    <button type="button" data-role="admin" class="role-btn flex flex-col items-center justify-center p-3 border-2 border-gray-200 rounded-lg hover:border-purple-300 transition-colors">
+                        <i data-feather="shield" class="w-5 h-5 mb-2 text-purple-500"></i>
+                        <span>Admin</span>
+                    </button>
+                </div>
+                <input type="hidden" id="role" name="role" required>
+                <p id="role-error" class="error-message hidden">Please select your role</p>
+            </div>
+            
+            <!-- Personal Information -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <input type="text" id="firstName" name="first_name" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="John">
+                    <p id="firstName-error" class="error-message hidden"></p>
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <input type="text" id="lastName" name="last_name" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Doe">
+                    <p id="lastName-error" class="error-message hidden"></p>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" name="email" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="your@email.com">
+                <p id="email-error" class="error-message hidden"></p>
+            </div>
+            
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <input type="tel" id="phone" name="phone" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="+1 (123) 456-7890">
+                <p id="phone-error" class="error-message hidden"></p>
+            </div>
+            
+            <!-- Address Information -->
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                <input type="text" id="address" name="address" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="123 Main Street">
+                <p id="address-error" class="error-message hidden"></p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                    <input type="text" id="city" name="city" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="City">
+                    <p id="city-error" class="error-message hidden"></p>
+                </div>
+                <div>
+                    <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                    <input type="text" id="state" name="state" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="State">
+                    <p id="state-error" class="error-message hidden"></p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                    <input type="text" id="postal_code" name="postal_code" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="12345">
+                    <p id="postal_code-error" class="error-message hidden"></p>
+                </div>
+                <div>
+                    <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                    <input type="text" id="country" name="country" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Country">
+                    <p id="country-error" class="error-message hidden"></p>
+                </div>
+            </div>
+            
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="relative">
+                    <input type="password" id="password" name="password" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 pr-10"
+                           placeholder="••••••••">
+                    <button type="button" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-500" id="togglePassword">
+                        <i data-feather="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="mt-1 text-xs text-gray-500">
+                    Must be at least 8 characters
+                </div>
+                <p id="password-error" class="error-message hidden"></p>
+            </div>
+            
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="••••••••">
+                <p id="confirmPassword-error" class="error-message hidden"></p>
+            </div>
+            
+            <!-- Business Information (shown for vendors) -->
+            <div id="businessInfo" class="hidden space-y-4">
+                <div class="border-t border-gray-200 pt-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Business Information</h3>
+                    <div>
+                        <label for="businessName" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+                        <input type="text" id="businessName" name="business_name" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                               placeholder="Your Business Name">
+                    </div>
+                    <div class="mt-3">
+                        <label for="businessType" class="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
+                        <select id="businessType" name="vendor_type" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select business type</option>
+                            <option value="producer">Producer/Farmer</option>
+                            <option value="wholesaler">Wholesaler</option>
+                            <option value="distributor">Distributor</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shop Information (shown for shopkeepers) -->
+            <div id="shopInfo" class="hidden space-y-4">
+                <div class="border-t border-gray-200 pt-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Shop Information</h3>
+                    <div>
+                        <label for="shopName" class="block text-sm font-medium text-gray-700 mb-1">Shop Name</label>
+                        <input type="text" id="shopName" name="shop_name" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                               placeholder="Your Shop Name">
+                    </div>
+                    <div class="mt-3">
+                        <label for="shopType" class="block text-sm font-medium text-gray-700 mb-1">Shop Type</label>
+                        <select id="shopType" name="shop_type" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select shop type</option>
+                            <option value="grocery">Grocery Store</option>
+                            <option value="restaurant">Restaurant</option>
+                            <option value="cafe">Cafe</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="terms" name="terms" type="checkbox" required 
+                           class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                </div>
+                <div class="ml-3 text-sm">
+                    <label for="terms" class="font-medium text-gray-700">I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms and Conditions</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a></label>
+                    <p id="terms-error" class="error-message hidden">You must agree to the terms</p>
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                Create Account
+            </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">
+                Already have an account? 
+                <a href="login page.html" class="font-medium text-blue-600 hover:text-blue-500">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // Role Selection
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.role-btn').forEach(b => 
+                    b.classList.remove('active', 'border-blue-500', 'border-green-500', 'border-purple-500'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Set border color based on role
+                const role = btn.dataset.role;
+                if (role === 'shopkeeper') {
+                    btn.classList.add('border-blue-500');
+                } else if (role === 'vendor') {
+                    btn.classList.add('border-green-500');
+                } else if (role === 'admin') {
+                    btn.classList.add('border-purple-500');
+                }
+                
+                // Set hidden input value
+                document.getElementById('role').value = role;
+                
+                // Show/hide business info for vendors
+                if (role === 'vendor') {
+                    document.getElementById('businessInfo').classList.remove('hidden');
+                    document.getElementById('shopInfo').classList.add('hidden');
+                } else if (role === 'shopkeeper') {
+                    document.getElementById('shopInfo').classList.remove('hidden');
+                    document.getElementById('businessInfo').classList.add('hidden');
+                } else {
+                    document.getElementById('businessInfo').classList.add('hidden');
+                    document.getElementById('shopInfo').classList.add('hidden');
+                }
+                
+                // Clear role error
+                document.getElementById('role-error').classList.add('hidden');
+            });
+        });
+        
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', () => {
+            const passwordInput = document.getElementById('password');
+            const icon = document.querySelector('#togglePassword i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.setAttribute('data-feather', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                icon.setAttribute('data-feather', 'eye');
+            }
+            feather.replace();
+        });
+        
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.add('hidden');
+                el.textContent = '';
+            });
+            document.querySelectorAll('.input-error').forEach(el => {
+                el.classList.remove('input-error');
+            });
+            
+            // Validate form
+            let isValid = true;
+            const formData = {};
+            
+            // Validate role
+            if (!document.getElementById('role').value) {
+                document.getElementById('role-error').classList.remove('hidden');
+                document.getElementById('role-error').textContent = 'Please select your role';
+                isValid = false;
+            } else {
+                formData.role = document.getElementById('role').value;
+            }
+            
+            // Validate name
+            const firstName = document.getElementById('firstName').value.trim();
+            if (!firstName) {
+                document.getElementById('firstName-error').classList.remove('hidden');
+                document.getElementById('firstName-error').textContent = 'First name is required';
+                document.getElementById('firstName').classList.add('input-error');
+                isValid = false;
+            } else {
+                formData.first_name = firstName;
+            }
+            
+            const lastName = document.getElementById('lastName').value.trim();
+            if (!lastName) {
+                document.getElementById('lastName-error').classList.remove('hidden');
+                document.getElementById('lastName-error').textContent = 'Last name is required';
+                document.getElementById('lastName').classList.add('input-error');
+                isValid = false;
+            } else {
+                formData.last_name = lastName;
+            }
+            
+            // Validate email
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                document.getElementById('email-error').classList.remove('hidden');
+                document.getElementById('email-error').textContent = 'Email is required';
+                document.getElementById('email').classList.add('input-error');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('email-error').classList.remove('hidden');
+                document.getElementById('email-error').textContent = 'Please enter a valid email';
+                document.getElementById('email').classList.add('input-error');
+                isValid = false;
+            } else {
+                formData.email = email;
+            }
+            
+            // Validate phone
+            const phone = document.getElementById('phone').value.trim();
+            if (!phone) {
+                document.getElementById('phone-error').classList.remove('hidden');
+                document.getElementById('phone-error').textContent = 'Phone number is required';
+                document.getElementById('phone').classList.add('input-error');
+                isValid = false;
+            } else {
+                formData.phone = phone;
+            }
+
+            // Validate address
+            const address = document.getElementById('address').value.trim();
+            if (!address) {
+                document.getElementById('address').classList.add('input-error');
+                document.getElementById('address-error').classList.remove('hidden');
+                document.getElementById('address-error').textContent = 'Address is required';
+                isValid = false;
+            } else {
+                formData.address = address;
+            }
+
+            // Validate city
+            const city = document.getElementById('city').value.trim();
+            if (!city) {
+                document.getElementById('city').classList.add('input-error');
+                document.getElementById('city-error').classList.remove('hidden');
+                document.getElementById('city-error').textContent = 'City is required';
+                isValid = false;
+            } else {
+                formData.city = city;
+            }
+
+            // Validate state
+            const state = document.getElementById('state').value.trim();
+            if (!state) {
+                document.getElementById('state').classList.add('input-error');
+                document.getElementById('state-error').classList.remove('hidden');
+                document.getElementById('state-error').textContent = 'State is required';
+                isValid = false;
+            } else {
+                formData.state = state;
+            }
+
+            // Validate postal code
+            const postalCode = document.getElementById('postal_code').value.trim();
+            if (!postalCode) {
+                document.getElementById('postal_code').classList.add('input-error');
+                document.getElementById('postal_code-error').classList.remove('hidden');
+                document.getElementById('postal_code-error').textContent = 'Postal code is required';
+                isValid = false;
+            } else {
+                formData.postal_code = postalCode;
+            }
+
+            // Validate country
+            const country = document.getElementById('country').value.trim();
+            if (!country) {
+                document.getElementById('country').classList.add('input-error');
+                document.getElementById('country-error').classList.remove('hidden');
+                document.getElementById('country-error').textContent = 'Country is required';
+                isValid = false;
+            } else {
+                formData.country = country;
+            }
+            
+            // Validate password
+            const password = document.getElementById('password').value;
+            if (!password) {
+                document.getElementById('password-error').classList.remove('hidden');
+                document.getElementById('password-error').textContent = 'Password is required';
+                document.getElementById('password').classList.add('input-error');
+                isValid = false;
+            } else if (password.length < 8) {
+                document.getElementById('password-error').classList.remove('hidden');
+                document.getElementById('password-error').textContent = 'Password must be at least 8 characters';
+                document.getElementById('password').classList.add('input-error');
+                isValid = false;
+            } else {
+                formData.password = password;
+            }
+            
+            // Validate confirm password
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPassword-error').classList.remove('hidden');
+                document.getElementById('confirmPassword-error').textContent = 'Passwords do not match';
+                document.getElementById('confirmPassword').classList.add('input-error');
+                isValid = false;
+            }
+            
+            // Validate terms
+            if (!document.getElementById('terms').checked) {
+                document.getElementById('terms-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // If form is valid, submit it
+            if (isValid) {
+                // Add optional fields
+                formData.vendor_type = document.getElementById('businessType').value;
+                formData.shop_type = document.getElementById('shopType').value;
+                
+                // Create FormData object for submission
+                const submitFormData = new FormData();
+                
+                // Add all form data
+                submitFormData.append('first_name', formData.first_name);
+                submitFormData.append('last_name', formData.last_name);
+                submitFormData.append('email', formData.email);
+                submitFormData.append('password', formData.password);
+                submitFormData.append('role', formData.role);
+                submitFormData.append('address', formData.address);
+                submitFormData.append('city', formData.city);
+                submitFormData.append('state', formData.state);
+                submitFormData.append('postal_code', formData.postal_code);
+                submitFormData.append('country', formData.country);
+                submitFormData.append('phone', formData.phone);
+                submitFormData.append('shop_name', formData.shop_name || '');
+                submitFormData.append('shop_type', formData.shop_type || '');
+                submitFormData.append('business_name', formData.business_name || '');
+                submitFormData.append('vendor_type', formData.vendor_type || '');
+                
+                // Submit using fetch
+                fetch('signup.php', {
+                    method: 'POST',
+                    body: submitFormData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    console.log('Server response:', result); // Debug log
+                    
+                    if (result.includes('error:')) {
+                        // Show error message
+                        const errorMessage = result.replace('error:', '');
+                        alert('Registration failed: ' + errorMessage);
+                    } else if (result.includes('duplicate')) {
+                        alert('Registration failed: Email already exists. Please use a different email.');
+                    } else if (result.trim() === 'success') {
+                        // Success - redirect based on role
+                        alert('Registration successful!');
+                        if (formData.role === 'shopkeeper') {
+                            window.location.href = 'shopkeeper dashboard.html';
+                        } else if (formData.role === 'vendor') {
+                            window.location.href = 'vendor_dashboard.php';
+                        } else if (formData.role === 'admin') {
+                            window.location.href = 'admin dashboard.html';
+                        }
+                    } else {
+                        // Unknown response
+                        console.error('Unknown response:', result);
+                        alert('Registration failed: Unexpected response from server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Registration failed: ' + error.message);
+                });
+            }
+        });
+        
+        // Link from login page - preselect role if coming from login page
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const role = urlParams.get('role');
+            const error = urlParams.get('error');
+            
+            // Display error message if present
+            if (error) {
+                const errorDiv = document.getElementById('error-message');
+                const errorText = document.getElementById('error-text');
+                errorText.textContent = decodeURIComponent(error);
+                errorDiv.classList.remove('hidden');
+            }
+            
+            if (role && ['shopkeeper', 'vendor', 'admin'].includes(role)) {
+                const roleBtn = document.querySelector(`.role-btn[data-role="${role}"]`);
+                if (roleBtn) {
+                    roleBtn.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

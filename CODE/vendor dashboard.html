@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard - AI Raw Material Marketplace</title>
+    <link href="../styles/tailwind.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-xl font-bold text-green-600">Marketplace AI</h1>
+                    </div>
+                    <nav class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#" class="border-green-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Products</a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Orders</a>
+                        <a href="../pages/ai-assistant.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">AI Assistant</a>
+                    </nav>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <div class="ml-3 relative">
+                        <div>
+                            <button type="button" class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" id="user-menu-button">
+                                <span class="sr-only">Open user menu</span>
+                                <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-medium">VD</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Total Products</p>
+                            <p class="mt-1 text-3xl font-semibold text-gray-900">24</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i data-feather="package" class="w-6 h-6 text-green-600"></i>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">
+                        <span class="text-green-600 font-medium">+2.5%</span> from last month
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Active Orders</p>
+                            <p class="mt-1 text-3xl font-semibold text-gray-900">8</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i data-feather="shopping-cart" class="w-6 h-6 text-blue-600"></i>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">
+                        <span class="text-green-600 font-medium">+12%</span> from last week
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Revenue</p>
+                            <p class="mt-1 text-3xl font-semibold text-gray-900">₹1,245</p>
+                        </div>
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <i data-feather="dollar-sign" class="w-6 h-6 text-purple-600"></i>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">
+                        <span class="text-green-600 font-medium">+8.3%</span> from last month
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Recent Orders -->
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-medium text-gray-900">Recent Orders</h2>
+                    <a href="#" class="text-sm font-medium text-green-600 hover:text-green-500">View all</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-78945</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Fresh Mart</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹45.20</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-green-600 hover:text-green-900">View</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-78944</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Corner Store</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹28.75</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Processing</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-green-600 hover:text-green-900">View</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-78943</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Organic Foods</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹62.30</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Shipped</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-green-600 hover:text-green-900">View</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Products Management -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-medium text-gray-900">Your Products</h2>
+                    <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <i data-feather="plus" class="w-4 h-4 mr-2"></i>
+                        Add Product
+                    </button>
+                </div>
+                
+                <!-- Products Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Product Card 1 -->
+                    <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Fresh Tomatoes" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                                    <i data-feather="edit" class="w-4 h-4 text-blue-500"></i>
+                                </button>
+                                <button class="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                                    <i data-feather="trash-2" class="w-4 h-4 text-red-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-medium text-gray-900">Fresh Tomatoes</h3>
+                            <div class="mt-2 flex justify-between items-center">
+                                <div>
+                                    <span class="text-xl font-bold text-gray-900">₹1.99</span>
+                                    <span class="text-sm text-gray-500">/ kg</span>
+                                </div>
+                                <div class="text-sm text-gray-500">Stock: 25 kg</div>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between">
+                                <span class="text-sm text-gray-500">Last updated: 2 days ago</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Card 2 -->
+                    <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Organic Potatoes" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                                    <i data-feather="edit" class="w-4 h-4 text-blue-500"></i>
+                                </button>
+                                <button class="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                                    <i data-feather="trash-2" class="w-4 h-4 text-red-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-medium text-gray-900">Organic Potatoes</h3>
+                            <div class="mt-2 flex justify-between items-center">
+                                <div>
+                                    <span class="text-xl font-bold text-gray-900">₹2.49</span>
+                                    <span class="text-sm text-gray-500">/ kg</span>
+                                </div>
+                                <div class="text-sm text-gray-500">Stock: 18 kg</div>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between">
+                                <span class="text-sm text-gray-500">Last updated: 1 day ago</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Card 3 -->
+                    <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Fresh Onions" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                                    <i data-feather="edit" class="w-4 h-4 text-blue-500"></i>
+                                </button>
+                                <button class="bg-white p-1 rounded-full shadow hover:bg-gray-100">
+                                    <i data-feather="trash-2" class="w-4 h-4 text-red-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-medium text-gray-900">Fresh Onions</h3>
+                            <div class="mt-2 flex justify-between items-center">
+                                <div>
+                                    <span class="text-xl font-bold text-gray-900">₹0.99</span>
+                                    <span class="text-sm text-gray-500">/ kg</span>
+                                </div>
+                                <div class="text-sm text-gray-500">Stock: 0 kg</div>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between">
+                                <span class="text-sm text-gray-500">Last updated: 5 hours ago</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    Out of stock
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add Product Modal -->
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden" id="addProductModal">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Add New Product</h3>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-500">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="productName" class="block text-sm font-medium text-gray-700">Product Name</label>
+                            <input type="text" id="productName" name="productName" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label for="productCategory" class="block text-sm font-medium text-gray-700">Category</label>
+                            <select id="productCategory" name="productCategory" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                <option>Vegetables</option>
+                                <option>Fruits</option>
+                                <option>Dairy</option>
+                                <option>Meat</option>
+                                <option>Grains</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="productPrice" class="block text-sm font-medium text-gray-700">Price</label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500 sm:text-sm">$</span>
+                                    </div>
+                                    <input type="text" name="productPrice" id="productPrice" class="focus:ring-green-500 focus:border-green-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0.00">
+                                    <div class="absolute inset-y-0 right-0 flex items-center">
+                                        <label for="unit" class="sr-only">Unit</label>
+                                        <select id="unit" name="unit" class="focus:ring-green-500 focus:border-green-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
+                                            <option>/kg</option>
+                                            <option>/lb</option>
+                                            <option>/unit</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="productStock" class="block text-sm font-medium text-gray-700">Stock</label>
+                                <input type="number" id="productStock" name="productStock" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="productDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea id="productDescription" name="productDescription" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-green-500 focus:border-green-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Product Image</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                            <span>Upload a file</span>
+                                            <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" id="cancelAddProduct" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                Cancel
+                            </button>
+                            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                Save Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+        
+        // Modal functionality
+        document.querySelector('button:contains("Add Product")').addEventListener('click', () => {
+            document.getElementById('addProductModal').classList.remove('hidden');
+        });
+        
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('addProductModal').classList.add('hidden');
+        });
+        
+        document.getElementById('cancelAddProduct').addEventListener('click', () => {
+            document.getElementById('addProductModal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

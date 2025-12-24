@@ -1,0 +1,157 @@
+<?php
+session_start();
+include 'db.php';
+
+// Check if user is logged in as vendor
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'vendor') {
+    header("Location: login.php");
+    exit();
+}
+
+$vendor_id = $_SESSION['user_id'];
+
+// Get vendor orders
+$sql = "SELECT o.*, u.first_name, u.last_name, CONCAT(u.first_name, ' ', u.last_name) as customer_name, u.email, u.phone, u.address, u.city, u.state, u.postal_code, u.country, u.shop_name
+        FROM orders o 
+        LEFT JOIN users u ON o.user_id = u.id 
+        WHERE o.vendor_id = ? 
+        ORDER BY o.created_at DESC";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $vendor_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if orders table exists
+echo "<h1>Vendor Orders</h1>";
+
+// Display orders
+if ($result && $result->num_rows > 0) {
+    echo "<table border='1' style='width: 100%; border-collapse: collapse;'>";
+    echo "<tr style='background-color: #f2f2f2;'>";
+    echo "<th style='padding: 10px; text-align: left;'>Order ID</th>";
+    echo "<th style='padding: 10px; text-align: left;'>Customer</th>";
+    echo "<th style='padding: 10px; text-align: left;'>Products</th>";
+    echo "<th style='padding: 10px; text-align: left;'>Total</th>";
+    echo "<th style='padding: 10px; text-align: left;'>Status</th>";
+    echo "<th style='padding: 10px; text-align: left;'>Date</th>";
+    echo "<th style='padding: 10px; text-align: left;'>Actions</th>";
+    echo "</tr>";
+    
+    while ($order = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . $order['id'] . "</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>";
+        echo "<strong>" . htmlspecialchars($order['customer_name']) . "</strong><br>";
+        echo "<small>Email: " . htmlspecialchars($order['email']) . "</small><br>";
+        echo "<small>Phone: " . htmlspecialchars($order['phone']) . "</small><br>";
+        echo "<small>Shop: " . htmlspecialchars($order['shop_name']) . "</small><br>";
+        echo "<button type='button' onclick='toggleAddress(this)' class='btn btn-sm btn-info'>Show Address</button>";
+        echo "<div style='display:none; margin-top: 5px;' class='address-details'>";
+        echo htmlspecialchars($order['address']) . "<br>";
+        echo htmlspecialchars($order['city']) . ", " . htmlspecialchars($order['state']) . " " . htmlspecialchars($order['postal_code']) . "<br>";
+        echo htmlspecialchars($order['country']);
+        echo "</div>";
+        echo "</td>";
+        
+        // Get order items
+        $items_sql = "SELECT oi.*, p.name as product_name 
+                    FROM order_items oi 
+                    JOIN products p ON oi.product_id = p.id 
+                    WHERE oi.order_id = ?";
+        $items_stmt = $conn->prepare($items_sql);
+        $items_stmt->bind_param("i", $order['id']);
+        $items_stmt->execute();
+        $items_result = $items_stmt->get_result();
+        
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>";
+        if ($items_result && $items_result->num_rows > 0) {
+            while ($item = $items_result->fetch_assoc()) {
+                echo htmlspecialchars($item['product_name']) . " x " . $item['quantity'] . "<br>";
+            }
+        } else {
+            echo "No items found";
+        }
+        echo "</td>";
+        
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>$" . number_format($order['total'], 2) . "</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . htmlspecialchars($order['status']) . "</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>" . date('M j, Y g:i A', strtotime($order['created_at'])) . "</td>";
+        echo "<td style='padding: 10px; border: 1px solid #ddd;'>";
+        
+        // Status update form
+        echo "<form method='post' action='update_order_status.php'>";
+        echo "<input type='hidden' name='order_id' value='" . $order['id'] . "'>";
+        echo "<select name='status' style='padding: 5px; margin-right: 5px;'>";
+        $statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+        foreach ($statuses as $status) {
+            $selected = ($status == $order['status']) ? 'selected' : '';
+            echo "<option value='$status' $selected>$status</option>";
+        }
+        echo "</select>";
+        echo "<button type='submit' style='padding: 5px 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;'>Update</button>";
+        echo "</form>";
+        
+        echo "</td>";
+        echo "</tr>";
+    }
+    
+    echo "</table>";
+} else {
+    echo "<p>No orders found for this vendor.</p>";
+}
+
+// Create update_order_status.php script if it doesn't exist
+if (!file_exists('update_order_status.php')) {
+    $update_script = '<?php
+    session_start();
+    include "db.php";
+    
+    // Check if user is logged in as vendor
+    if (!isset($_SESSION["user_id"]) || $_SESSION["role"] !== "vendor") {
+        header("Location: login.php");
+        exit();
+    }
+    
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["order_id"]) && isset($_POST["status"])) {
+        $order_id = intval($_POST["order_id"]);
+        $status = $_POST["status"];
+        $vendor_id = $_SESSION["user_id"];
+        
+        // Verify this order belongs to the vendor
+        $check_sql = "SELECT id FROM orders WHERE id = ? AND vendor_id = ?";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("ii", $order_id, $vendor_id);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+        
+        if ($check_result && $check_result->num_rows > 0) {
+            // Update order status
+            $update_sql = "UPDATE orders SET status = ? WHERE id = ?";
+            $update_stmt = $conn->prepare($update_sql);
+            $update_stmt->bind_param("si", $status, $order_id);
+            
+            if ($update_stmt->execute()) {
+                $_SESSION["success_message"] = "Order status updated successfully!";
+            } else {
+                $_SESSION["error_message"] = "Error updating order status: " . $conn->error;
+            }
+        } else {
+            $_SESSION["error_message"] = "You do not have permission to update this order.";
+        }
+    } else {
+        $_SESSION["error_message"] = "Invalid request.";
+    }
+    
+    header("Location: vendor_orders.php");
+    exit();
+    ?>';
+    
+    file_put_contents('update_order_status.php', $update_script);
+    echo "<p>Created update_order_status.php script.</p>";
+}
+
+echo "<p><a href='vendor_dashboard_new.php' style='display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px;'>Return to Dashboard</a></p>";
+
+$conn->close();
+?>

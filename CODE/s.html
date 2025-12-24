@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - MARKETPLACE AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4A6FDC;
+            --primary-dark: #3A5FC8;
+            --secondary: #6c757d;
+            --success: #3BB77E;
+            --info: #17A2B8;
+            --warning: #F9B851;
+            --danger: #DC3545;
+            --light: #F8F9FC;
+            --dark: #2E3A59;
+            --gray: #858796;
+            --light-gray: #EAECF4;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: #F5F7FB;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header h1 i {
+            color: var(--primary);
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 111, 220, 0.2);
+        }
+        
+        .order-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .details-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .details-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .details-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            color: var(--dark);
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .details-card h3 i {
+            color: var(--primary);
+        }
+        
+        .detail-item {
+            margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .detail-item .label {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 5px;
+            width: 40%;
+            font-weight: 500;
+        }
+        
+        .detail-item .value {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--dark);
+            width: 60%;
+        }
+        
+        .detail-item .value strong {
+            font-weight: 600;
+        }
+        
+        .tracking-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            grid-column: 1 / -1;
+        }
+        
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .tracking-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--light-gray);
+            z-index: 1;
+        }
+        
+        .tracking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            width: 16%;
+        }
+        
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-text {
+            font-size: 13px;
+            color: var(--gray);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .step-date {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+            text-align: center;
+        }
+        
+        .step-active .step-icon {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(74, 111, 220, 0.3);
+        }
+        
+        .step-active .step-text {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .step-completed .step-icon {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .step-completed .step-text {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 10px 18px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 111, 220, 0.2);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--light-gray);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light-gray);
+            transform: translateY(-2px);
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .products-table th {
+            text-align: left;
+            padding: 15px;
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .products-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-bold {
+            font-weight: 600;
+        }
+        
+        .order-summary {
+            margin-top: 25px;
+            border-top: 2px solid var(--light-gray);
+            padding-top: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 0 10px;
+        }
+        
+        .summary-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            border-top: 1px solid var(--light-gray);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: rgba(59, 183, 126, 0.15);
+            color: #3BB77E;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .rating-stars {
+            color: #F9B851;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .order-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tracking-steps {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                gap: 20px;
+            }
+            
+            .tracking-step {
+                width: calc(33.33% - 20px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+            }
+            
+            .detail-item .label,
+            .detail-item .value {
+                width: 100%;
+            }
+            
+            .tracking-step {
+                width: calc(50% - 20px);
+            }
+            
+            .order-actions {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dashboard-container {
+                padding: 15px;
+            }
+            
+            .details-card {
+                padding: 20px;
+            }
+            
+            .tracking-step {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-file-invoice"></i> ORDER #30 DETAILS</h1>
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back to Orders
+            </button>
+        </div>
+        
+        <!-- Order Details Grid -->
+        <div class="order-details-grid">
+            <!-- Shopkeeper Details -->
+            <div class="details-card">
+                <h3><i class="fas fa-user-tie"></i> Shopkeeper Details</h3>
+                <div class="detail-item">
+                    <div class="label">Full Name</div>
+                    <div class="value"><strong>pookie N</strong></div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Email</div>
+                    <div class="value">nyaswanth81@gmail.com</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Phone</div>
+                    <div class="value">09392069522</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Business Name</div>
+                    <div class="value">Not specified</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Business Type</div>
+                    <div class="value">Not specified</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Member Since</div>
+                    <div class="value">Aug 21, 2025</div>
+                </div>
+            </div>
+            
+            <!-- Vendor Details -->
+            <div class="details-card">
+                <h3><i class="fas fa-store"></i> Vendor Details</h3>
+                <div class="detail-item">
+                    <div class="label">Vendor Name</div>
+                    <div class="value"><strong>Global Suppliers Inc.</strong></div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Email</div>
+                    <div class="value">contact@globalsuppliers.com</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Phone</div>
+                    <div class="value">+1 (800) 123-4567</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Address</div>
+                    <div class="value">123 Commerce Street, Business District, New York, NY 10001, USA</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Vendor Since</div>
+                    <div class="value">January 15, 2020</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Rating</div>
+                    <div class="value">
+                        <span class="rating-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                        4.5 (128 reviews)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Details -->
+            <div class="details-card">
+                <h3><i class="fas fa-shopping-bag"></i> Order Information</h3>
+                <div class="detail-item">
+                    <div class="label">Order ID</div>
+                    <div class="value"><strong>#30</strong></div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Order Date</div>
+                    <div class="value">Sep 4, 2025 11:56 AM</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Delivery Date</div>
+                    <div class="value">Sep 6, 2025 (Estimated)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Status</div>
+                    <div class="value">
+                        <span class="status-badge">Delivered</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Payment Method</div>
+                    <div class="value">Credit Card (Ending in 4567)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Payment Status</div>
+                    <div class="value">
+                        <span style="color: #3BB77E; font-weight: 600;">Paid</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shipping Details -->
+            <div class="details-card">
+                <h3><i class="fas fa-truck"></i> Shipping Information</h3>
+                <div class="detail-item">
+                    <div class="label">Shipping Address</div>
+                    <div class="value">
+                        N YASWANTH, ELIORA BOYS HOSTEL, INTU COLLEGE, ANANTAPUR<br>
+                        PUTTUR, Andhra Pradesh 515001<br>
+                        India
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Shipping Method</div>
+                    <div class="value">Express Delivery (2-3 business days)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Tracking Number</div>
+                    <div class="value">SH123456789US</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Carrier</div>
+                    <div class="value">Global Express Logistics</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">Last Update</div>
+                    <div class="value">Sep 5, 2025 03:45 PM</div>
+                </div>
+                <div class="order-actions">
+                    <button class="action-btn btn-primary">
+                        <i class="fas fa-search-location"></i> Track Package
+                    </button>
+                    <button class="action-btn btn-outline">
+                        <i class="fas fa-download"></i> Download Invoice
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Order Tracking -->
+            <div class="tracking-card">
+                <h3><i class="fas fa-map-marked-alt"></i> Order Tracking</h3>
+                <div class="tracking-steps">
+                    <div class="tracking-step step-completed">
+                        <div class="step-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="step-text">Order Placed</div>
+                        <div class="step-date">Sep 4, 11:56 AM</div>
+                    </div>
+                    <div class="tracking-step step-completed">
+                        <div class="step-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="step-text">Order Confirmed</div>
+                        <div class="step-date">Sep 4, 12:15 PM</div>
+                    </div>
+                    <div class="tracking-step step-completed">
+                        <div class="step-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="step-text">Processing</div>
+                        <div class="step-date">Sep 4, 02:30 PM</div>
+                    </div>
+                    <div class="tracking-step step-completed">
+                        <div class="step-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <div class="step-text">Shipped</div>
+                        <div class="step-date">Sep 5, 09:45 AM</div>
+                    </div>
+                    <div class="tracking-step step-active">
+                        <div class="step-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="step-text">Out for Delivery</div>
+                        <div class="step-date">Sep 5, 08:00 AM</div>
+                    </div>
+                    <div class="tracking-step">
+                        <div class="step-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="step-text">Delivered</div>
+                        <div class="step-date">Expected Sep 6</div>
+                    </div>
+                </div>
+                
+                <div class="order-actions">
+                    <button class="action-btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Update Status
+                    </button>
+                    <button class="action-btn btn-outline">
+                        <i class="fas fa-bell"></i> Send Notification
+                    </button>
+                    <button class="action-btn btn-outline">
+                        <i class="fas fa-envelope"></i> Contact Customer
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Order Items -->
+            <div class="details-card" style="grid-column: 1 / -1;">
+                <h3><i class="fas fa-list-alt"></i> Order Items</h3>
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>SKU</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong>Premium Smart Watch Series 5</strong><br>
+                                <span style="color: var(--gray);">Color: Black, Size: 42mm</span>
+                            </td>
+                            <td>SW5-BL-42</td>
+                            <td>₹399.00</td>
+                            <td>2</td>
+                            <td class="text-right">₹798.00</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Wireless Bluetooth Earbuds</strong><br>
+                                <span style="color: var(--gray);">Color: White</span>
+                            </td>
+                            <td>WB-EB-WH</td>
+                            <td>₹129.99</td>
+                            <td>1</td>
+                            <td class="text-right">₹129.99</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Smartphone Case</strong><br>
+                                <span style="color: var(--gray);">For iPhone 14 Pro</span>
+                            </td>
+                            <td>SC-IP14-TP</td>
+                            <td>₹29.99</td>
+                            <td>3</td>
+                            <td class="text-right">₹89.97</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <div>Subtotal</div>
+                        <div>₹1,017.96</div>
+                    </div>
+                    <div class="summary-row">
+                        <div>Shipping</div>
+                        <div>₹24.99</div>
+                    </div>
+                    <div class="summary-row">
+                        <div>Tax</div>
+                        <div>₹101.80</div>
+                    </div>
+                    <div class="summary-row">
+                        <div>Discount</div>
+                        <div style="color: var(--success);">-₹50.00</div>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <div>Total</div>
+                        <div>₹1,094.75</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>         

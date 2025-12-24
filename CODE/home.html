@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Raw Material Marketplace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Heroicons/Feather Icons CDN -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* Custom animation for glowing CTA */
+        .glow {
+            box-shadow: 0 0 20px 4px #3b82f6, 0 0 40px 8px #60a5fa;
+            animation: glowPulse 2s infinite alternate;
+        }
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 20px 4px #3b82f6, 0 0 40px 8px #60a5fa; }
+            100% { box-shadow: 0 0 40px 8px #2563eb, 0 0 60px 16px #60a5fa; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen flex flex-col">
+    <header>
+        <!-- Include Header Component -->
+        <div id="header"></div>
+    </header>
+   
+
+
+    <main class="flex-1">
+        <!-- Hero Section -->
+        <section class="hero relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-400 to-blue-500 text-white text-center py-24 shadow-lg">
+            <div class="absolute inset-0 opacity-30 pointer-events-none" style="background: radial-gradient(circle at 70% 30%, #fff 0%, transparent 70%);"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl font-extrabold drop-shadow-lg">Empowering Street Vendors with AI</h1>
+                <p class="mt-6 text-lg md:text-2xl font-medium max-w-2xl mx-auto">Connecting shopkeepers and vendors for a smarter, fairer raw material marketplace.</p>
+                <div class="mt-10 flex flex-col md:flex-row justify-center gap-6">
+                    <button id="shopkeeperBtn" class="glow inline-flex items-center justify-center gap-2 bg-white text-blue-600 font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-100 transition-all text-lg">
+                        <i data-feather="shopping-bag"></i>
+                        I am a Shopkeeper
+                    </button>
+                    <button id="vendorBtn" class="inline-flex items-center justify-center gap-2 bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 transition-all text-lg border-2 border-white">
+                        <i data-feather="truck"></i>
+                        I am a Vendor
+                    </button>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 flex justify-center pointer-events-none">
+                <svg width="100%" height="60" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#fff" fill-opacity="1" d="M0,0 C480,60 960,0 1440,60 L1440,60 L0,60 Z"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features py-20">
+            <h2 class="text-4xl font-extrabold text-center mb-12 text-blue-700">Why Choose Us?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="feature bg-white p-8 rounded-2xl shadow-lg border-t-4 border-blue-500 hover:scale-105 transition-transform">
+                    <div class="flex justify-center mb-4">
+                        <i data-feather="cpu" class="text-blue-500" style="width:40px;height:40px;"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-blue-700">AI Recommendations</h3>
+                    <p class="text-gray-600">Get personalized product suggestions tailored to your needs.</p>
+                </div>
+                <div class="feature bg-white p-8 rounded-2xl shadow-lg border-t-4 border-green-500 hover:scale-105 transition-transform">
+                    <div class="flex justify-center mb-4">
+                        <i data-feather="layers" class="text-green-500" style="width:40px;height:40px;"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-green-700">Wide Selection</h3>
+                    <p class="text-gray-600">Browse a vast range of raw materials from trusted vendors.</p>
+                </div>
+                <div class="feature bg-white p-8 rounded-2xl shadow-lg border-t-4 border-yellow-500 hover:scale-105 transition-transform">
+                    <div class="flex justify-center mb-4">
+                        <i data-feather="shield" class="text-yellow-500" style="width:40px;height:40px;"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-yellow-700">Secure Transactions</h3>
+                    <p class="text-gray-600">Safe, reliable, and transparent payment processes.</p>
+                </div>
+                <div class="feature bg-white p-8 rounded-2xl shadow-lg border-t-4 border-purple-500 hover:scale-105 transition-transform">
+                    <div class="flex justify-center mb-4">
+                        <i data-feather="message-circle" class="text-purple-500" style="width:40px;height:40px;"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-700">24/7 AI Assistant</h3>
+                    <p class="text-gray-600">Instant help and answers with our built-in AI assistant.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials py-20 bg-gradient-to-br from-blue-100 via-white to-blue-200">
+            <h2 class="text-4xl font-extrabold text-center mb-12 text-blue-700">What Our Users Say</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10">
+                <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full hover:scale-105 transition-transform border-l-4 border-blue-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-feather="user" class="text-blue-400"></i>
+                        <span class="font-bold text-blue-700">Happy Customer</span>
+                    </div>
+                    <blockquote class="italic text-gray-700">"This marketplace has transformed the way I source materials!"</blockquote>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full hover:scale-105 transition-transform border-l-4 border-green-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-feather="user-check" class="text-green-400"></i>
+                        <span class="font-bold text-green-700">Satisfied Vendor</span>
+                    </div>
+                    <blockquote class="italic text-gray-700">"The AI recommendations are spot on!"</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Preview Section -->
+        <section class="ai-assistant-preview py-20 relative">
+            <h2 class="text-4xl font-extrabold text-center mb-10 text-blue-700">Meet Your AI Assistant</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10">
+                <div class="bg-white rounded-2xl shadow-lg p-8 max-w-lg w-full flex flex-col items-center border-t-4 border-blue-500">
+                    <div class="bg-blue-100 rounded-full p-4 mb-4 animate-bounce">
+                        <i data-feather="message-square" class="text-blue-500" style="width:48px;height:48px;"></i>
+                    </div>
+                    <p class="text-gray-700 text-lg mb-4 text-center">Our AI assistant is here to help you find the right materials quickly and efficiently.</p>
+                    <a href="ai_assistant.html?from=home" class="glow inline-flex items-center gap-2 bg-blue-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 transition-all text-lg">
+                        <i data-feather="zap"></i>
+                        Chat with AI
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Links Section -->
+        <!--
+        <section class="py-10 bg-white shadow-inner">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-extrabold mb-6 text-blue-700">Ready to Dive Deeper?</h2>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                    <a href="shopkeeper dashboard.html" class="btn bg-blue-600 text-white font-bold px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all text-lg">
+                        Go to Shopkeeper Dashboard
+                    </a>
+                    <a href="vendor_dashboard_new.php" class="btn bg-green-600 text-white font-bold px-6 py-3 rounded-lg shadow-md hover:bg-green-700 transition-all text-lg">
+                        Go to Vendor Dashboard
+                    </a>
+                    <a href="ai-assistant.html" class="btn bg-purple-600 text-white font-bold px-6 py-3 rounded-lg shadow-md hover:bg-purple-700 transition-all text-lg">
+                        Ask AI
+                    </a>
+                </div>
+            </div>
+        </section>
+        -->
+
+        <!-- Sign Up Link -->
+        <section class="py-10 text-center">
+            <a href="#" id="signupLink" class="text-blue-600 hover:underline">Don't have an account? Sign up</a>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Include Footer Component -->
+        <div id="footer"></div>
+    </footer>
+
+    <script src="../scripts/main.js"></script>
+    <script>
+      feather.replace();
+      // Button logic for role-based navigation
+      document.getElementById('shopkeeperBtn').onclick = function() {
+        window.location.href = 'login page.html?role=shopkeeper';
+      };
+      document.getElementById('vendorBtn').onclick = function() {
+        window.location.href = 'login page.html?role=vendor';
+      };
+      // Sign up link logic (default to shopkeeper, can be changed as needed)
+      document.getElementById('signupLink').onclick = function(e) {
+        e.preventDefault();
+        // Optionally, prompt for role or default to shopkeeper
+        window.location.href = 'signup.html?role=shopkeeper';
+      };
+    </script>
+</body>
+</html>

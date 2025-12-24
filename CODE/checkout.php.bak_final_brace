@@ -1,0 +1,182 @@
+<?php
+require 'db.php';
+session_start();
+header('Content-Type: application/json');
+
+// Get cart data from request
+$data = json_decode(file_get_contents('php://input'), true);
+$cart = $data['cart'] ?? [];
+
+// Get user ID from session (fallback to 1 for testing)
+$user_id = $_SESSION['user_id'] ?? 1; // Replace with real user/session logic
+$user_email = $_SESSION['email'] ?? ''; // Get user email from session
+
+// Start transaction
+$conn->begin_transaction();
+
+try {
+    // Group items by vendor
+    $vendor_orders = [];
+    
+    // Calculate total and organize items by vendor
+    $total = 0;
+    foreach ($cart as $item) {
+        $product_id = (int)$item['id'];
+        $quantity = (int)$item['qty'];
+        $price = (float)$item['price'];
+        $vendor_id = isset($item['vendor_id']) ? (int)$item['vendor_id'] : 0;
+        
+        // Check if product exists before proceeding
+        $check_product = "SELECT id, name, stock, vendor_id FROM products WHERE id = ?";
+        $check_stmt = $conn->prepare($check_product);
+        $check_stmt->bind_param("i", $product_id);
+        $check_stmt->execute();
+        $product_result = $check_stmt->get_result();
+        
+        if (!$product_result || $product_result->num_rows == 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => "Product with ID {$product_id} not found"
+            ]);
+            exit;
+        }
+        
+        $product_data = $product_result->fetch_assoc();
+        // Use the vendor_id from the database if not provided in the cart
+        if ($vendor_id == 0 && !empty($product_data['vendor_id'])) {
+            $vendor_id = (int)$product_data['vendor_id'];
+        }
+        
+        $item_total = $price * $quantity;
+        $total += $item_total;
+        
+        // Group items by vendor
+        if (!isset($vendor_orders[$vendor_id])) {
+            $vendor_orders[$vendor_id] = [
+                'items' => [],
+                'total' => 0
+            ];
+        }
+        
+        $vendor_orders[$vendor_id]['items'][] = [
+            'product_id' => $product_id,
+            'quantity' => $quantity,
+            'price' => $price,
+            'name' => $item['name']
+        ];
+        
+        $vendor_orders[$vendor_id]['total'] += $item_total;
+        
+        // Check if product has enough stock
+        $current_stock = $product_data['stock'];
+        
+        if ($current_stock < $quantity) {
+            // Return a user-friendly error
+            echo json_encode([
+                'success' => false,
+                'message' => "Not enough stock for product {$item['name']}. Available: {$current_stock}, Requested: {$quantity}",
+                'product_id' => $product_id,
+                'available_stock' => $current_stock
+            ]);
+            exit;
+        }
+        
+        // Update stock
+        $new_stock = $current_stock - $quantity;
+        $update_stock = "UPDATE products SET stock = ? WHERE id = ?";
+        $update_stmt = $conn->prepare($update_stock);
+        $update_stmt->bind_param("ii", $new_stock, $product_id);
+        $update_stmt->execute();
+    } // ✅ End of foreach loop
+
+    // ✅ Removed extra closing brace here
+
+    // Create orders for each vendor
+    $created_orders = [];
+    foreach ($vendor_orders as $vendor_id => $vendor_order) {
+        // Insert order
+        $stmt = $conn->prepare("INSERT INTO orders (user_id, vendor_id, total, total_amount, status, created_at) VALUES (?, ?, ?, ?, 'pending', NOW())");
+        $stmt->bind_param("iidd", $user_id, $vendor_id, $vendor_order['total'], $vendor_order['total']);
+        $stmt->execute();
+        $order_id = $stmt->insert_id;
+        
+        $created_orders[] = [
+            'order_id' => $order_id,
+            'vendor_id' => $vendor_id,
+            'total' => $vendor_order['total'],
+            'items' => $vendor_order['items']
+        ];
+
+        // Insert order items
+        foreach ($vendor_order['items'] as $item) {
+            $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $order_id, $item['product_id'], $item['quantity'], $item['price']);
+            $stmt->execute();
+        }
+    }
+
+    // Get shopkeeper information
+    $shopkeeper_info = [];
+    $res = $conn->prepare("SELECT email, first_name, last_name, phone, shop_name FROM users WHERE id = ?");
+    $res->bind_param("i", $user_id);
+    $res->execute();
+    $result = $res->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $shopkeeper_info = $row;
+    }
+
+    // Get vendor information
+    $vendor_info = [];
+    if (!empty($vendor_orders)) {
+        $vendor_ids = array_keys($vendor_orders);
+
+        // Filter out zero/null vendor IDs
+        $valid_vendor_ids = array_filter($vendor_ids, function($id) { return $id > 0; });
+
+        if (count($valid_vendor_ids) > 0) {
+            $placeholders = str_repeat('?,', count($valid_vendor_ids) - 1) . '?';
+            $stmt = $conn->prepare("SELECT id, name, email FROM vendors WHERE id IN ($placeholders)");
+            $types = str_repeat('i', count($valid_vendor_ids));
+            $stmt->bind_param($types, ...$valid_vendor_ids);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $vendor_info[$row['id']] = $row;
+            }
+        }
+    }
+
+    // Commit transaction
+    $conn->commit();
+
+    // Prepare response
+    $response = [
+        'success' => true,
+        'orders' => $created_orders,
+        'shopkeeper' => $shopkeeper_info,
+        'vendors' => $vendor_info,
+        'total_amount' => $total,
+        'message' => "Order placed successfully!"
+    ];
+    echo json_encode($response);
+
+} catch (Exception $e) {
+    // Rollback transaction on error
+    $conn->rollback();
+
+    // Return error response with more details
+    $error_message = $e->getMessage();
+    $error_trace = $e->getTraceAsString();
+
+    // Log the error
+    error_log("Checkout Error: " . $error_message . "\n" . $error_trace);
+
+    echo json_encode([
+        'success' => false,
+        'message' => "An error occurred during checkout. Please try again.",
+        'error_details' => $error_message
+    ]);
+}
+
+$conn->close();
+?>

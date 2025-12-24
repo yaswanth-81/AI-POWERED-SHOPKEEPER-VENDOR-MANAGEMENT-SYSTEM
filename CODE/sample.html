@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details | ShopkeeprSW</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --danger: #ef233c;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            padding: 20px 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-nav {
+            padding: 0 20px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Main content styles */
+        .main-content {
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            margin-left: 15px;
+        }
+        
+        /* Order details card */
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .info-item {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .highlight-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Products section */
+        .products-section {
+            margin-top: 30px;
+        }
+        
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        
+        .product-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 20px;
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .product-category {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .product-meta {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .meta-item {
+            font-size: 14px;
+        }
+        
+        .meta-label {
+            color: var(--gray);
+            margin-right: 5px;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Delivery section */
+        .delivery-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .delivery-map {
+            height: 200px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--light-gray);
+            color: var(--gray);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #d90429;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>ShopkeeprSW</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-shopping-bag"></i> Products
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-list-alt"></i> Orders
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i> Vendors
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">Order Details</h1>
+                <div class="user-profile">
+                    <span>Admin Panel</span>
+                    <div class="user-avatar"></div>
+                </div>
+            </div>
+            
+            <!-- Order Details Card -->
+            <div class="order-card">
+                <div class="card-header">
+                    <h2 class="card-title">Order #ORD-2025-08-0142</h2>
+                    <span class="order-status status-processing">Processing</span>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Shopkeeper Name</div>
+                        <div class="info-value highlight-value">Pookie N</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Business Name</div>
+                        <div class="info-value">Pookie Enterprises</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Contact Email</div>
+                        <div class="info-value">pookie@gmail.com</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">+1 (555) 123-4567</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Order Date</div>
+                        <div class="info-value">August 14, 2025 - 10:45 AM</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Payment Method</div>
+                        <div class="info-value">Credit Card (VISA ****4242)</div>
+                    </div>
+                </div>
+                
+                <!-- Products Section -->
+                <div class="products-section">
+                    <h3 class="card-title" style="margin-bottom: 20px;">Order Items (2)</h3>
+                    
+                    <div class="product-item">
+                        <img src="https://images.unsplash.com/photo-1582284540020-8acbe03f4924?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Onions" class="product-image">
+                        <div class="product-details">
+                            <div class="product-name">ONIONS</div>
+                            <div class="product-category">Vegetables</div>
+                            <div class="product-meta">
+                                <div class="meta-item">
+                                    <span class="meta-label">Price:</span>
+                                    <span class="product-price">₹1.20 /kg</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Quantity:</span>
+                                    <span>5 kg</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Subtotal:</span>
+                                    <span>₹6.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Potatoes" class="product-image">
+                        <div class="product-details">
+                            <div class="product-name">POTATOES</div>
+                            <div class="product-category">Vegetables</div>
+                            <div class="product-meta">
+                                <div class="meta-item">
+                                    <span class="meta-label">Price:</span>
+                                    <span class="product-price">₹0.80 /kg</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Quantity:</span>
+                                    <span>10 kg</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Subtotal:</span>
+                                    <span>₹8.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order Summary -->
+                <div style="margin-top: 30px; background: var(--light); padding: 20px; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Subtotal:</span>
+                        <span>₹14.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Delivery Fee:</span>
+                        <span>₹2.50</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 18px; padding-top: 10px; border-top: 1px solid var(--light-gray);">
+                        <span>Total:</span>
+                        <span>₹16.50</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delivery Information -->
+            <div class="delivery-card">
+                <h2 class="card-title">Delivery Information</h2>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Delivery Address</div>
+                        <div class="info-value">
+                            123 Market Street<br>
+                            Suite 45<br>
+                            San Francisco, CA 94103<br>
+                            United States
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Delivery Instructions</div>
+                        <div class="info-value">Ring bell twice. Leave at reception if no answer.</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Delivery Contact</div>
+                        <div class="info-value">
+                            John Smith<br>
+                            +1 (555) 987-6543
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Delivery Window</div>
+                        <div class="info-value">
+                            August 15, 2025<br>
+                            2:00 PM - 5:00 PM
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="delivery-map">
+                    <i class="fas fa-map-marked-alt" style="margin-right: 10px;"></i>
+                    Delivery Location Map
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-outline">
+                    <i class="fas fa-print" style="margin-right: 8px;"></i> Print Invoice
+                </button>
+                <button class="btn btn-outline">
+                    <i class="fas fa-envelope" style="margin-right: 8px;"></i> Email Receipt
+                </button>
+                <button class="btn btn-danger">
+                    <i class="fas fa-times" style="margin-right: 8px;"></i> Cancel Order
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-check" style="margin-right: 8px;"></i> Mark as Delivered
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
